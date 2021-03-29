@@ -74,8 +74,8 @@ def BayesClassifier():
     ))-set(SpamVocabularyCounter[0].keys())
     OnlyInSpam = set(SpamVocabularyCounter[0].keys(
     ))-set(HamVocabularyCounter[0].keys())
-    CorrectHamNum = len(OnlyInHam)+HamVocabularyCounter[1]
-    CorrectSpamNum = len(OnlyInSpam)+SpamVocabularyCounter[1]
+    CorrectHamNum = len(OnlyInSpam)+HamVocabularyCounter[1]
+    CorrectSpamNum = len(OnlyInHam)+SpamVocabularyCounter[1]
     for i in OnlyInHam:
         SpamVocabularyCounter[0][i] = 1
     for i in OnlyInSpam:
@@ -219,7 +219,7 @@ def TestRes_1(FilePath):
         if ham.__contains__(i):
             var1 = spam[i]/ham[i]
             count *= var1
-    if count > 1000:
+    if count > 1.356:
         return "Spam"
     else:
         return "ham"
@@ -243,7 +243,7 @@ def TestRes():
                 pass
                # print("预测结果为{},但真实结果为{}".format(GuessRes,TestData[0]))
             Line = f.readline()
-        print("预测准确率为{}".format(str(count/35419)))
+        print("预测准确率为{}".format(str(count/TmpValue)))
 
     print(count)
 
@@ -252,7 +252,7 @@ if __name__ == '__main__':
     #    wordlist=FileVocabularDfitf(os.listdir(config.SpamPath),config.SpamPath)
     with open('StopWords.txt') as f:
         ban_word = f.read().split()
-    BayesClassifier()
+    #BayesClassifier()
     with open('res.json') as f:
         data = json.loads(f.read())
         spam = data[0]
