@@ -1,0 +1,6 @@
+/信息内容安全/EmailFilter/__pycache__/
+/信息内容安全/EmailFilter/bigdataset/
+**/bigdataset.tgz
+**/index
+**/email/
+**/*.doc
