@@ -344,10 +344,12 @@ def TestRes():
         NameList=['accuracy','recall','precision','f-meansure']
         a=plt.bar([0,1,2,3],ResList,tick_label=NameList)
         add_number(a)
-        plt.show()
+        # plt.show()
 
 
 def TestRes1():
+    x=[]
+    y=[]
     count = 0
     TmpValue = 0
     count_flase=0
@@ -383,7 +385,12 @@ def TestRes1():
                 #print(GuessRes[1])
                 #print("预测结果为{},但真实结果为{}".format(GuessRes,TestData[0]))
                 # break
+            if count_right>0:
+                x.append(count_right/(count_right+count_flase))
+                y.append(count_right/(count_right+count_flase1))
             Line = f.readline()
+        plt.plot(x,y)
+        plt.show()
         accuracy=count/TmpValue
         recall=count_right/(count_right+count_flase)
         precision=count_right/(count_right+count_flase1)
@@ -396,7 +403,7 @@ def TestRes1():
         NameList=['accuracy','recall','precision','f-meansure']
         a=plt.bar([0,1,2,3],ResList,tick_label=NameList)
         add_number(a)
-        plt.show()
+        # plt.show()
 
     return count/TmpValue
 
@@ -433,6 +440,12 @@ if __name__ == '__main__':
     spam['spam_prob']=data['spam_prob']
     # #spam=data
     # print(d_order[-1])
+    import time
+    time1=time.time()
     TestRes1()
+    time2=time.time()
     print("*"*100)
     TestRes()
+    time3=time.time()
+    print(time2-time1)
+    print(time3-time2)
