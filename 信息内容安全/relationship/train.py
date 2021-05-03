@@ -26,10 +26,10 @@ replace_words = {'师母': '吴慧芬', '陈老': '陈岩石', '老赵': '赵德
                  '赵公子': '赵瑞龙', '郑乾': '郑胜利', '孙书记': '孙连城', '赵总': '赵瑞龙', '昌明': '季昌明',
                  '沙书记': '沙瑞金', '郑董': '郑胜利', '宝宝': '张宝宝', '小高': '高小凤', '老高': '高育良',
                  '伯仲': '杜伯仲', '老杜': '杜伯仲', '老肖': '肖钢玉', '刘总': '刘新建', "美女老总": "高小琴"}
-names = {}  # 姓名字典
-relationships = {}  # 关系字典
-lineNames = []  # 每段内人物的关系
-node = []  # 存放处理后的人物
+names = {}  
+relationships = {}  
+lineNames = []  
+node = []  
 
 
 def get_data():
@@ -66,53 +66,47 @@ def getLine():
 
 
 def read_txt():  # 读取剧作并分词
-    # 加载人物字典(注意这个文件要用utf-8编码，可以使用sublime进行转换为utf-8编码)
+
     jieba.load_userdict("name.txt")
-    # f=codecs.open(path,'r') #读取剧作,并将其转换为utf-8编码
     LineList = getLine()
     print('词句加载完成')
     for line in tqdm.tqdm(LineList):
-        poss = pseg.cut(line)  # 分词并返回该词词形
-        lineNames.append([])  # 为新读入的一段添加人物名称列表
+        poss = pseg.cut(line)  
+        lineNames.append([]) 
         for w in poss:
-            if w.word in stopwords:  # 去掉某些停用词
+            if w.word in stopwords: 
                 continue
             if w.flag != "nr" or len(w.word) < 2:
                 if w.word not in replace_words:
                     continue
-            if w.word in replace_words:  # 将某些在文中人物的昵称替换成正式的名字
+            if w.word in replace_words: 
                 w.word = replace_words[w.word]
-            lineNames[-1].append(w.word)  # 为当前段增加一个人物
-            if names.get(w.word) is None:  # 如果这个名字从来没出现过，初始化这个名字
+            lineNames[-1].append(w.word)  
+            if names.get(w.word) is None: 
                 names[w.word] = 0
                 relationships[w.word] = {}
-            names[w.word] += 1  # 该人物出现次数加1
-    for line in lineNames:  # 通过对于每一段段内关系的累加，得到在整篇小说中的关系
+            names[w.word] += 1 
+    for line in lineNames:  
         for name1 in line:
             for name2 in line:
                 if name1 == name2:
                     continue
-                # 如果没有出现过两者之间的关系，则新建项
                 if relationships[name1].get(name2) is None:
                     relationships[name1][name2] = 1
                 else:
-                    relationships[name1][name2] += 1  # 如果两个人已经出现过，则亲密度加1
+                    relationships[name1][name2] += 1  
 
 
 def write_csv():
-    # 在windows这种使用\r\n的系统里，不用newline=‘’的话
-    # 会自动在行尾多添加个\r，导致多出一个空行，即行尾为\r\r\n
     csv_edge_file = open("edge.csv", "w+", newline="")
     writer = csv.writer(csv_edge_file)
-    # 先写入列名,"type"为生成无向图做准备
     writer.writerow(["source", "target", "weight", "type"])
     for name, edges in relationships.items():
         for v, w in edges.items():
             if w > 20:
                 node.append(name)
-                writer.writerow((name, v, str(w), "undirected"))  # 按行写入数据
+                writer.writerow((name, v, str(w), "undirected"))
     csv_edge_file.close()
-    # 生成node文件
     s = set(node)
     csv_node_file = open("node.csv", "w", newline="")
     wnode = csv.writer(csv_node_file)
