@@ -4,5 +4,17 @@
 **/index
 **/email/
 **/*.doc
+**/*.docx
 **/*.tmp
 **/classify/tc-corpus-answer/
+/信息内容安全/kdd99/10pc
+/信息内容安全/kdd99/corrected
+/信息内容安全/movie/*.html
+/信息内容安全/movie/*.txt
+/信息内容安全/movie/*.json
+/信息内容安全/movie/*.ttf
+/信息内容安全/movie/*.jpg
+/信息内容安全/movie/*.png
+/信息内容安全/EmotionAnlyse/*.txt
+/信息内容安全/EmotionAnlyse/*.json
+/信息内容安全/EmotionAnlyse/dataset/
